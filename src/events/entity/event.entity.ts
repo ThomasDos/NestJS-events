@@ -1,11 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Attendee } from 'src/attendees/entity/attendee.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Event {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ length: 100 })
+  @Column({ length: 255 })
   name: string;
 
   @Column()
@@ -22,4 +29,14 @@ export class Event {
 
   @Column({ nullable: true })
   updated_at: Date;
+
+  @ManyToMany(() => Attendee, (attendee) => attendee.events, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: 'event_attendee',
+    joinColumn: { name: 'event_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'attendee_id', referencedColumnName: 'id' },
+  })
+  attendees?: Attendee[];
 }
