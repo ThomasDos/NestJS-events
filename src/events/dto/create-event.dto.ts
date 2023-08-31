@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { IsDateString, IsString, Length } from 'class-validator';
 
 export class CreateEventDto {
@@ -6,6 +7,7 @@ export class CreateEventDto {
     message:
       'Name must be at least 5 characters long and maximum 255 characters long.',
   })
+  @Transform(({ value }) => value.trim())
   name: string;
   @IsString()
   description: string;
