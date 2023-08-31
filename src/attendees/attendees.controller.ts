@@ -1,9 +1,18 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseInterceptors,
+} from '@nestjs/common';
 import { EventsService } from 'src/events/events.service';
 import { AttendeesService } from './attendees.service';
 import { CreateAttendeeDto } from './dto/create-attendee.dto';
 
 @Controller('attendees')
+@UseInterceptors(ClassSerializerInterceptor)
 export class AttendeesController {
   constructor(
     private attendeesService: AttendeesService,
