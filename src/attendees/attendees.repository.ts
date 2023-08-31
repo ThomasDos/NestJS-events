@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Event } from 'src/events/entity/event.entity';
 import { Repository } from 'typeorm';
@@ -21,17 +21,20 @@ export class AttendeesRepository {
   }
 
   async getAttendee(id: string): Promise<Attendee> {
-    return await this.attendeeRepository.findOne({
+    const attendee = await this.attendeeRepository.findOne({
       where: { id },
       relations: ['events'],
     });
+
+    if (!attendee) {
+      throw new NotFoundException('Attendee not found');
+    }
+
+    return attendee;
   }
 
   async eventRegistration(attendeeId: string, event: Event): Promise<Attendee> {
-    const attendee = await this.attendeeRepository.findOne({
-      where: { id: attendeeId },
-      relations: ['events'],
-    });
+    const attendee = await this.getAttendee(attendeeId);
 
     if (!attendee.events.length) {
       attendee.events = [event];
