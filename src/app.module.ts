@@ -1,9 +1,9 @@
+import ormConfig from '@config/orm.config';
+import { AttendeesModule } from '@domains/attendees/attendees.module';
+import { EventsModule } from '@domains/events/events.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import ormConfig from './config/orm.config';
-import { EventsModule } from './events/events.module';
-import { AttendeesModule } from './attendees/attendees.module';
 
 @Module({
   imports: [

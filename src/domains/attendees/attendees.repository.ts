@@ -1,6 +1,6 @@
+import { Event } from '@domains/events/entity/event.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Event } from 'src/events/entity/event.entity';
 import { Repository } from 'typeorm';
 import { CreateAttendeeDto } from './dto/create-attendee.dto';
 import { Attendee } from './entity/attendee.entity';
@@ -38,11 +38,16 @@ export class AttendeesRepository {
 
     if (!attendee.events.length) {
       attendee.events = [event];
-      await this.attendeeRepository.save(attendee);
     } else {
+      const eventAlreadyRegistered = attendee.events.find(
+        (registeredEvent) => registeredEvent.id === event.id,
+      );
+      if (eventAlreadyRegistered) {
+        throw new NotFoundException('Event already registered');
+      }
       attendee.events.push(event);
-      await this.attendeeRepository.save(attendee);
     }
+    await this.attendeeRepository.save(attendee);
     return attendee;
   }
 }

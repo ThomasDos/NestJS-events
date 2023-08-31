@@ -1,3 +1,4 @@
+import { EventsService } from '@domains/events/events.service';
 import {
   Body,
   ClassSerializerInterceptor,
@@ -7,7 +8,6 @@ import {
   Post,
   UseInterceptors,
 } from '@nestjs/common';
-import { EventsService } from 'src/events/events.service';
 import { AttendeesService } from './attendees.service';
 import { CreateAttendeeDto } from './dto/create-attendee.dto';
 

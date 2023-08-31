@@ -1,5 +1,5 @@
+import { Event } from '@domains/events/entity/event.entity';
 import { Injectable } from '@nestjs/common';
-import { Event } from 'src/events/entity/event.entity';
 import { AttendeesRepository } from './attendees.repository';
 import { CreateAttendeeDto } from './dto/create-attendee.dto';
 

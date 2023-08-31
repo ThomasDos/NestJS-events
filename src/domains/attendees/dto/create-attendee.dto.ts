@@ -1,9 +1,9 @@
-import { Transform } from 'class-transformer';
 import { IsString, Length } from 'class-validator';
+import { ToTrim } from 'src/shared/decorator/to-trim.decorator';
 
 export class CreateAttendeeDto {
   @IsString()
   @Length(3, 50)
-  @Transform(({ value }) => value.trim(), { toClassOnly: true })
+  @ToTrim
   name: string;
 }

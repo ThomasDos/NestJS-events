@@ -1,4 +1,4 @@
-import { Attendee } from 'src/attendees/entity/attendee.entity';
+import { Attendee } from '@domains/attendees/entity/attendee.entity';
 import {
   Column,
   Entity,
