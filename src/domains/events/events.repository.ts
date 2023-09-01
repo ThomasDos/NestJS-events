@@ -1,7 +1,9 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
+import { ListEventsDto, WHEN_EVENT_FILTER } from './dto/list-events.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entity/event.entity';
 
@@ -23,7 +25,6 @@ export class EventsRepository {
   }
 
   async getEvent(id: string): Promise<Event> {
-    // const event = await this.getEventsBaseQuery().andWhere({ id }).getOne();
     const event = await this.repository.findOne({
       where: { id },
       relations: ['attendees'],
@@ -33,6 +34,55 @@ export class EventsRepository {
       throw new NotFoundException(`Event with ID ${id} not found`);
     }
     return event;
+  }
+
+  async getEventWithAttendeeCount(id: string): Promise<Event> {
+    const event = await this.getEventsBaseQuery()
+      .andWhere({ id })
+      .loadAllRelationIds({ relations: ['attendees'] })
+      .loadRelationCountAndMap('e.attendeesCount', 'e.attendees')
+      .getOne();
+
+    if (!event) {
+      throw new NotFoundException(`Event with ID ${id} not found`);
+    }
+    return event;
+  }
+
+  async getEventsWithAttendeeCount(filter: ListEventsDto): Promise<Event[]> {
+    const query = this.getEventsBaseQuery()
+      .loadAllRelationIds({ relations: ['attendees'] })
+      .loadRelationCountAndMap('e.attendeesCount', 'e.attendees');
+
+    if (filter.when === WHEN_EVENT_FILTER.ALL) {
+      return await query.getMany();
+    }
+
+    switch (filter.when) {
+      case WHEN_EVENT_FILTER.TODAY:
+        query.andWhere(
+          `e.event_date BETWEEN CURRENT_DATE AND CURRENT_DATE + 1`,
+        );
+        break;
+      case WHEN_EVENT_FILTER.TOMORROW:
+        query.andWhere(
+          `e.event_date BETWEEN CURRENT_DATE + 1 AND CURRENT_DATE + 2`,
+        );
+        break;
+      case WHEN_EVENT_FILTER.THIS_WEEK:
+        query.andWhere(`e.event_date BETWEEN :start AND :end`, {
+          start: dayjs().startOf('month').toISOString(),
+          end: dayjs().endOf('month').toISOString(),
+        });
+        break;
+      case WHEN_EVENT_FILTER.NEXT_WEEK:
+        query.andWhere(`e.event_date BETWEEN :start AND :end`, {
+          start: dayjs().add(1, 'month').startOf('month').toISOString(),
+          end: dayjs().add(1, 'month').endOf('month').toISOString(),
+        });
+        break;
+    }
+    return await query.orderBy('e.event_date', 'DESC').getMany();
   }
 
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {

@@ -8,8 +8,10 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CreateEventDto } from './dto/create-event.dto';
+import { ListEventsDto } from './dto/list-events.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { Event } from './entity/event.entity';
 import { EventsService } from './events.service';
@@ -20,8 +22,8 @@ export class EventsController {
   constructor(private eventsService: EventsService) {}
 
   @Get()
-  getEvents() {
-    return this.eventsService.getEvents();
+  getEvents(@Query() filter: ListEventsDto) {
+    return this.eventsService.getEvents(filter);
   }
 
   @Get(':id')
