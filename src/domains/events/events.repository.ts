@@ -1,3 +1,4 @@
+import { paginate } from '@/shared/pagination/paginator';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
@@ -49,14 +50,10 @@ export class EventsRepository {
     return event;
   }
 
-  async getEventsWithAttendeeCount(filter: ListEventsDto): Promise<Event[]> {
+  getEventsWithAttendeeCount(filter: ListEventsDto) {
     const query = this.getEventsBaseQuery()
       .loadAllRelationIds({ relations: ['attendees'] })
       .loadRelationCountAndMap('e.attendeesCount', 'e.attendees');
-
-    if (filter.when === WHEN_EVENT_FILTER.ALL) {
-      return await query.getMany();
-    }
 
     switch (filter.when) {
       case WHEN_EVENT_FILTER.TODAY:
@@ -82,7 +79,16 @@ export class EventsRepository {
         });
         break;
     }
-    return await query.orderBy('e.event_date', 'DESC').getMany();
+
+    return query;
+  }
+
+  async getEventsWithAttendeeCountPaginated(filter: ListEventsDto) {
+    const query = this.getEventsWithAttendeeCount(filter);
+    delete filter.when;
+    const { ...options } = filter;
+    const { data } = await paginate<Event>(query, options);
+    return data;
   }
 
   async createEvent(createEventDto: CreateEventDto): Promise<Event> {

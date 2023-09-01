@@ -8,8 +8,10 @@ import { EventsRepository } from './events.repository';
 @Injectable()
 export class EventsService {
   constructor(private eventsRepository: EventsRepository) {}
-  async getEvents(filter: ListEventsDto): Promise<Event[]> {
-    return await this.eventsRepository.getEventsWithAttendeeCount(filter);
+  async getEvents(filter: ListEventsDto) {
+    return await this.eventsRepository.getEventsWithAttendeeCountPaginated(
+      filter,
+    );
   }
 
   async getEvent(id: string): Promise<Event> {
