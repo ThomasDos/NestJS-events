@@ -105,6 +105,9 @@ export class EventsRepository {
   }
 
   async deleteEvent(id: string): Promise<void> {
-    await this.repository.delete(id);
+    const result = await this.repository.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException(`Event with ID ${id} not found`);
+    }
   }
 }

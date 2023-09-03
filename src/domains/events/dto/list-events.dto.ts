@@ -1,7 +1,11 @@
+import { IsBooleanString, IsOptional } from 'class-validator';
+
 export class ListEventsDto {
   when?: WHEN_EVENT_FILTER = WHEN_EVENT_FILTER.ALL;
   limit = 10;
   current_page = 1;
+  @IsBooleanString()
+  @IsOptional()
   total?: boolean;
 }
 
