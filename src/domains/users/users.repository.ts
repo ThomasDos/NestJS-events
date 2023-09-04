@@ -24,13 +24,16 @@ export class UsersRepository {
     return await this.usersRepository.find();
   }
 
-  async createUser(user: CreateUserDto) {
+  async createUser(user: CreateUserDto): Promise<User> {
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(user.password, salt);
-    return await this.usersRepository.save({
+    const newUser: User = await this.usersRepository.save({
       username: user.username,
       password: passwordHash,
     });
+
+    delete newUser.password;
+    return newUser;
   }
 
   async deleteUsers() {

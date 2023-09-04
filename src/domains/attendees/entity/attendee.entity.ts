@@ -1,5 +1,5 @@
-import { Event } from '@domains/events/entity/event.entity';
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Event } from '@/domains/events/entity/event.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum AttendeeAnswerEnum {
   ACCEPTED = 'ACCEPTED',
@@ -14,6 +14,10 @@ export class Attendee {
   @Column()
   name: string;
 
-  @ManyToMany(() => Event, (event) => event.attendees)
-  events?: Event[];
+  // MANY TO MANY RELATIONSHIP: EVENT AND ATTENDEE
+  // @ManyToMany(() => Event, (event) => event.attendees)
+  // events?: Event[];
+
+  @ManyToOne(() => Event, (event) => event.attendees)
+  event?: Event;
 }

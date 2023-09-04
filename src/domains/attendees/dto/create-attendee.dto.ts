@@ -1,4 +1,4 @@
-import { IsString, Length } from 'class-validator';
+import { IsString, IsUUID, Length } from 'class-validator';
 import { ToTrim } from 'src/shared/decorator/to-trim.decorator';
 
 export class CreateAttendeeDto {
@@ -6,4 +6,7 @@ export class CreateAttendeeDto {
   @Length(3, 50)
   @ToTrim
   name: string;
+
+  @IsUUID()
+  event_id: string;
 }

@@ -1,13 +1,18 @@
 import { Event } from '@domains/events/entity/event.entity';
 import { Injectable } from '@nestjs/common';
+import { EventsService } from '../events/events.service';
 import { AttendeesRepository } from './attendees.repository';
 import { CreateAttendeeDto } from './dto/create-attendee.dto';
 
 @Injectable()
 export class AttendeesService {
-  constructor(private readonly attendeesRepository: AttendeesRepository) {}
+  constructor(
+    private readonly attendeesRepository: AttendeesRepository,
+    private readonly eventsService: EventsService,
+  ) {}
   async createAttendee(attendee: CreateAttendeeDto) {
-    return await this.attendeesRepository.createAttendee(attendee);
+    const event = await this.eventsService.getEvent(attendee.event_id);
+    return await this.attendeesRepository.createAttendee(attendee, event);
   }
 
   async getAttendees() {

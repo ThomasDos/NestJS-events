@@ -1,11 +1,5 @@
-import { Attendee } from '@domains/attendees/entity/attendee.entity';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Attendee } from '@/domains/attendees/entity/attendee.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Event {
@@ -30,13 +24,19 @@ export class Event {
   @Column({ nullable: true })
   updated_at: Date;
 
-  @ManyToMany(() => Attendee, (attendee) => attendee.events, {
+  //MANY TO MANY RELATIONSHIP: EVENT AND ATTENDEE
+  // @ManyToMany(() => Attendee, (attendee) => attendee.events, {
+  //   cascade: true,
+  // })
+  // @JoinTable({
+  //   name: 'event_attendee',
+  //   joinColumn: { name: 'event_id', referencedColumnName: 'id' },
+  //   inverseJoinColumn: { name: 'attendee_id', referencedColumnName: 'id' },
+  // })
+  // attendees?: Attendee[];
+
+  @OneToMany(() => Attendee, (attendee) => attendee.event, {
     cascade: true,
-  })
-  @JoinTable({
-    name: 'event_attendee',
-    joinColumn: { name: 'event_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'attendee_id', referencedColumnName: 'id' },
   })
   attendees?: Attendee[];
 }

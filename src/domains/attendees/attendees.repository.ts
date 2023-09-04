@@ -12,18 +12,25 @@ export class AttendeesRepository {
     private readonly attendeeRepository: Repository<Attendee>,
   ) {}
 
-  async createAttendee(attendee: CreateAttendeeDto): Promise<Attendee> {
-    return await this.attendeeRepository.save(attendee);
+  async createAttendee(
+    attendee: CreateAttendeeDto,
+    event: Event,
+  ): Promise<Attendee> {
+    const { name } = attendee;
+    return await this.attendeeRepository.save({
+      name,
+      event,
+    });
   }
 
   async getAttendees(): Promise<Attendee[]> {
-    return await this.attendeeRepository.find();
+    return await this.attendeeRepository.find({ relations: ['event'] });
   }
 
   async getAttendee(id: string): Promise<Attendee> {
     const attendee = await this.attendeeRepository.findOne({
       where: { id },
-      relations: ['events'],
+      relations: ['event'],
     });
 
     if (!attendee) {
@@ -36,18 +43,11 @@ export class AttendeesRepository {
   async eventRegistration(attendeeId: string, event: Event): Promise<Attendee> {
     const attendee = await this.getAttendee(attendeeId);
 
-    if (!attendee.events.length) {
-      attendee.events = [event];
+    if (!attendee.event) {
+      attendee.event = event;
     } else {
-      const eventAlreadyRegistered = attendee.events.find(
-        (registeredEvent) => registeredEvent.id === event.id,
-      );
-      if (eventAlreadyRegistered) {
-        throw new NotFoundException('Event already registered');
-      }
-      attendee.events.push(event);
+      throw new NotFoundException('Event already registered');
     }
-    await this.attendeeRepository.save(attendee);
-    return attendee;
+    return await this.attendeeRepository.save(attendee);
   }
 }
