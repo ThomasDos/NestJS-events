@@ -1,3 +1,5 @@
+import { IsAdmin } from '@/shared/decorator/is-admin.decorator';
+import { AuthGuardJwtAdmin } from '@/shared/guard/auth-guard-jwt-admin.guard';
 import { AuthGuardJwt } from '@/shared/guard/auth-guard-jwt.guard';
 import { AuthGuardLocal } from '@/shared/guard/auth-guard-local.guard';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
@@ -25,6 +27,12 @@ export class AuthController {
   @Get('me')
   @UseGuards(AuthGuardJwt)
   async getMe(@CurrentUser() user: User) {
+    return user;
+  }
+
+  @Get('admin')
+  @UseGuards(AuthGuardJwtAdmin)
+  async getAdmin(@CurrentUser() user: User, @IsAdmin() isAdmin: boolean) {
     return user;
   }
 }
