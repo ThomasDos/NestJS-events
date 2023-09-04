@@ -1,31 +1,29 @@
-import { Controller, Get, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { UsersService } from '../users/users.service';
+import { CurrentUser } from '@shared/decorator/current-user.decorator';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { User } from '../users/entity/user.entity';
 import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
+
   @Post('signin')
   @UseGuards(AuthGuard('local'))
-  async signIn(@Request() request) {
-    const access_token = this.authService.getTokenForUser(request.user);
-    return { access_token };
-  }
-
-  @Post('signup')
-  async signUp(@Request() request) {
-    const user = await this.usersService.createUser(request.body);
+  async signIn(@CurrentUser() user) {
     const access_token = this.authService.getTokenForUser(user);
     return { access_token };
   }
 
+  @Post('signup')
+  async signUp(@Body() user: CreateUserDto) {
+    return await this.authService.signUp(user);
+  }
+
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
-  async getMe(@Request() request) {
-    return request.user;
+  async getMe(@CurrentUser() user: User) {
+    return user;
   }
 }

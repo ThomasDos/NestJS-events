@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsBoolean, IsString } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -7,9 +7,13 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   @IsString()
   username: string;
+
+  @Column({ default: false })
+  @IsBoolean()
+  is_admin: boolean;
 
   @Column()
   @Exclude({ toPlainOnly: true })
