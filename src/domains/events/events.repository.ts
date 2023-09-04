@@ -3,6 +3,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
 import { Repository } from 'typeorm';
+import { User } from '../users/entity/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
 import { ListEventsDto, WHEN_EVENT_FILTER } from './dto/list-events.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -91,21 +92,28 @@ export class EventsRepository {
     return data;
   }
 
-  async createEvent(createEventDto: CreateEventDto): Promise<Event> {
-    const event = await this.repository.save(createEventDto);
+  async createEvent(
+    createEventDto: CreateEventDto,
+    user: User,
+  ): Promise<Event> {
+    const event = await this.repository.save({
+      ...createEventDto,
+      user,
+    });
     return event;
   }
 
   async updateEvent(
     id: string,
     updateEventDto: UpdateEventDto,
+    userId: string,
   ): Promise<Event> {
-    await this.repository.update(id, updateEventDto);
-    return await this.repository.findOne({ where: { id } });
+    await this.repository.update({ id, user_id: userId }, updateEventDto);
+    return await this.repository.findOne({ where: { id, user_id: userId } });
   }
 
-  async deleteEvent(id: string): Promise<void> {
-    const result = await this.repository.delete(id);
+  async deleteEvent(id: string, userId: string): Promise<void> {
+    const result = await this.repository.delete({ user_id: userId, id: id });
     if (!result.affected) {
       throw new NotFoundException(`Event with ID ${id} not found`);
     }

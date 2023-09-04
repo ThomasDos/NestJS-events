@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { User } from '../users/entity/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
 import { ListEventsDto } from './dto/list-events.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -18,18 +19,22 @@ export class EventsService {
     return await this.eventsRepository.getEvent(id);
   }
 
-  async createEvent(createEventDto: CreateEventDto): Promise<Event> {
-    return await this.eventsRepository.createEvent(createEventDto);
+  async createEvent(
+    createEventDto: CreateEventDto,
+    user: User,
+  ): Promise<Event> {
+    return await this.eventsRepository.createEvent(createEventDto, user);
   }
 
   async updateEvent(
     id: string,
     updateEventDto: UpdateEventDto,
+    userId: string,
   ): Promise<Event> {
-    return await this.eventsRepository.updateEvent(id, updateEventDto);
+    return await this.eventsRepository.updateEvent(id, updateEventDto, userId);
   }
 
-  async deleteEvent(id: string): Promise<void> {
-    return await this.eventsRepository.deleteEvent(id);
+  async deleteEvent(id: string, userId: string): Promise<void> {
+    return await this.eventsRepository.deleteEvent(id, userId);
   }
 }

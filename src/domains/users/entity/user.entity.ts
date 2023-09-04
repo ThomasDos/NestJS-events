@@ -1,6 +1,7 @@
+import { Event } from '@domains/events/entity/event.entity';
 import { Exclude } from 'class-transformer';
 import { IsBoolean, IsString } from 'class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -18,4 +19,7 @@ export class User {
   @Column()
   @Exclude({ toPlainOnly: true })
   password: string;
+
+  @OneToMany(() => Event, (event) => event.user, { cascade: true })
+  events?: Event[];
 }

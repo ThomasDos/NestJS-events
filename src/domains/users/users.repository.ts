@@ -13,11 +13,21 @@ export class UsersRepository {
   ) {}
 
   async getUserById(id: string) {
-    return await this.usersRepository.findOneBy({ id });
+    return await this.usersRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['events'],
+    });
   }
 
   async getUserByUsername(username: string) {
-    return await this.usersRepository.findOneBy({ username });
+    return await this.usersRepository.findOne({
+      where: {
+        username,
+      },
+      relations: ['events'],
+    });
   }
 
   async getUsers() {

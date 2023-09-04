@@ -1,3 +1,5 @@
+import { CurrentUser } from '@/shared/decorator/current-user.decorator';
+import { AuthGuardJwt } from '@/shared/guard/auth-guard-jwt.guard';
 import {
   Body,
   Controller,
@@ -9,7 +11,9 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { User } from '../users/entity/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
 import { ListEventsDto } from './dto/list-events.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -32,21 +36,25 @@ export class EventsController {
   }
 
   @Post()
-  createEvent(@Body() input: CreateEventDto) {
-    return this.eventsService.createEvent(input);
+  @UseGuards(AuthGuardJwt)
+  createEvent(@Body() input: CreateEventDto, @CurrentUser() user: User) {
+    return this.eventsService.createEvent(input, user);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuardJwt)
   updateEvent(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() input: UpdateEventDto,
+    @CurrentUser() user,
   ) {
-    return this.eventsService.updateEvent(id, input);
+    return this.eventsService.updateEvent(id, input, user.id);
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuardJwt)
   @HttpCode(204)
-  removeEvent(@Param('id', ParseUUIDPipe) id: string) {
-    return this.eventsService.deleteEvent(id);
+  removeEvent(@Param('id', ParseUUIDPipe) id: string, @CurrentUser() user) {
+    return this.eventsService.deleteEvent(id, user.id);
   }
 }
