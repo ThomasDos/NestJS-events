@@ -1,5 +1,5 @@
+import { ToTrim } from '@/shared/decorators/to-trim.decorator';
 import { IsString, IsUUID, Length } from 'class-validator';
-import { ToTrim } from 'src/shared/decorator/to-trim.decorator';
 
 export class CreateAttendeeDto {
   @IsString()

@@ -1,9 +1,9 @@
-import { IsAdmin } from '@/shared/decorator/is-admin.decorator';
-import { AuthGuardJwtAdmin } from '@/shared/guard/auth-guard-jwt-admin.guard';
-import { AuthGuardJwt } from '@/shared/guard/auth-guard-jwt.guard';
-import { AuthGuardLocal } from '@/shared/guard/auth-guard-local.guard';
+import { CurrentUser } from '@/shared/decorators/current-user.decorator';
+import { IsAdmin } from '@/shared/decorators/is-admin.decorator';
+import { AuthGuardJwtAdmin } from '@/shared/guards/auth-guard-jwt-admin.guard';
+import { AuthGuardJwt } from '@/shared/guards/auth-guard-jwt.guard';
+import { AuthGuardLocal } from '@/shared/guards/auth-guard-local.guard';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { CurrentUser } from '@shared/decorator/current-user.decorator';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { User } from '../users/entity/user.entity';
 import { AuthService } from './auth.service';

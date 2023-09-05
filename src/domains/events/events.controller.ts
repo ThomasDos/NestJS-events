@@ -1,5 +1,5 @@
-import { CurrentUser } from '@/shared/decorator/current-user.decorator';
-import { AuthGuardJwt } from '@/shared/guard/auth-guard-jwt.guard';
+import { CurrentUser } from '@/shared/decorators/current-user.decorator';
+import { AuthGuardJwt } from '@/shared/guards/auth-guard-jwt.guard';
 import {
   Body,
   Controller,

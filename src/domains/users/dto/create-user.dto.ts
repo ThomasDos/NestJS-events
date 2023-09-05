@@ -1,4 +1,4 @@
-import { ToTrim } from '@/shared/decorator/to-trim.decorator';
+import { ToTrim } from '@/shared/decorators/to-trim.decorator';
 import { Exclude } from 'class-transformer';
 import { IsBooleanString, IsOptional, Length, Matches } from 'class-validator';
 

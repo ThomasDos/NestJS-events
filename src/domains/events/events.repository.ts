@@ -1,4 +1,4 @@
-import { paginate } from '@/shared/pagination/paginator';
+import { paginate } from '@/shared/utils/pagination.utils';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as dayjs from 'dayjs';
