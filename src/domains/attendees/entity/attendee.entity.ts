@@ -1,5 +1,14 @@
 import { Event } from '@/domains/events/entity/event.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from '@/domains/users/entity/user.entity';
+import { PaginationResult } from '@/shared/utils/pagination.utils';
+import { Expose } from 'class-transformer';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum AttendeeAnswerEnum {
   ACCEPTED = 'ACCEPTED',
@@ -9,9 +18,11 @@ export enum AttendeeAnswerEnum {
 @Entity()
 export class Attendee {
   @PrimaryGeneratedColumn('uuid')
+  @Expose()
   id: string;
 
   @Column()
+  @Expose()
   name: string;
 
   // MANY TO MANY RELATIONSHIP: EVENT AND ATTENDEE
@@ -19,5 +30,22 @@ export class Attendee {
   // events?: Event[];
 
   @ManyToOne(() => Event, (event) => event.attendees)
-  event?: Event;
+  @JoinColumn({ name: 'event_id' })
+  @Expose()
+  event: Event;
+
+  @Column()
+  @Expose()
+  event_id: string;
+
+  @ManyToOne(() => User, (user) => user.attendees)
+  @JoinColumn({ name: 'user_id' })
+  @Expose()
+  user: User;
+
+  @Column()
+  @Expose()
+  user_id: string;
 }
+
+export type PaginationEvents = PaginationResult<Event>;

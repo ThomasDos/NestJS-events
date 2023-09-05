@@ -92,6 +92,20 @@ export class EventsRepository {
     return data;
   }
 
+  async getEventsByUserIdPaginated(
+    userId: string,
+    filter: ListEventsDto,
+  ): Promise<Event[]> {
+    const query = this.getEventsWithAttendeeCount(filter)
+      .andWhere('e.user_id = :userId', { userId })
+      .orderBy('e.event_date', 'ASC');
+
+    delete filter.when;
+    const { ...options } = filter;
+    const { data } = await paginate<Event>(query, options);
+    return data;
+  }
+
   async createEvent(
     createEventDto: CreateEventDto,
     user: User,

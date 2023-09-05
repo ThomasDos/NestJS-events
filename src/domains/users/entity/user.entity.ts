@@ -1,3 +1,4 @@
+import { Attendee } from '@/domains/attendees/entity/attendee.entity';
 import { Event } from '@domains/events/entity/event.entity';
 import { Expose } from 'class-transformer';
 import { IsBoolean, IsString } from 'class-validator';
@@ -28,4 +29,10 @@ export class User {
   @Expose()
   @OneToMany(() => Event, (event) => event.user, { cascade: true })
   events?: Event[];
+
+  @Expose()
+  @OneToMany(() => Attendee, (attendee) => attendee.event, {
+    cascade: true,
+  })
+  attendees?: Attendee[];
 }

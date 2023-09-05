@@ -24,6 +24,11 @@ export class AttendeesController {
     return await this.attendeesService.getAttendees();
   }
 
+  @Get('event/:id')
+  async getAttendeesByEvent(@Param('id') eventId: string) {
+    return await this.attendeesService.getAttendeesByEvent(eventId);
+  }
+
   @Get(':id')
   async getAttendee(@Param('id') id: string) {
     return await this.attendeesService.getAttendee(id);

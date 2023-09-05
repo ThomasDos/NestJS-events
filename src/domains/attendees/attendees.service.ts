@@ -19,6 +19,10 @@ export class AttendeesService {
     return await this.attendeesRepository.getAttendees();
   }
 
+  async getAttendeesByEvent(eventId: string) {
+    return await this.attendeesRepository.getAttendeesByEvent(eventId);
+  }
+
   async getAttendee(id: string) {
     return await this.attendeesRepository.getAttendee(id);
   }

@@ -26,8 +26,17 @@ export class EventsController {
   constructor(private eventsService: EventsService) {}
 
   @Get()
+  // @ApiQuery({ type: ListEventsDto })
   getEvents(@Query() filter: ListEventsDto) {
     return this.eventsService.getEvents(filter);
+  }
+
+  @Get('user/:userId')
+  getEventsByUserId(
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Query() filter: ListEventsDto,
+  ) {
+    return this.eventsService.getEventsByUserIdPaginated(userId, filter);
   }
 
   @Get(':id')

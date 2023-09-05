@@ -15,6 +15,16 @@ export class EventsService {
     );
   }
 
+  async getEventsByUserIdPaginated(
+    userId: string,
+    filter: ListEventsDto,
+  ): Promise<Event[]> {
+    return await this.eventsRepository.getEventsByUserIdPaginated(
+      userId,
+      filter,
+    );
+  }
+
   async getEvent(id: string): Promise<Event> {
     return await this.eventsRepository.getEvent(id);
   }

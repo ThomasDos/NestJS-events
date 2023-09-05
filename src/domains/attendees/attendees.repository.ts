@@ -27,6 +27,12 @@ export class AttendeesRepository {
     return await this.attendeeRepository.find({ relations: ['event'] });
   }
 
+  async getAttendeesByEvent(eventId: string): Promise<Attendee[]> {
+    return await this.attendeeRepository.find({
+      where: { event_id: eventId },
+    });
+  }
+
   async getAttendee(id: string): Promise<Attendee> {
     const attendee = await this.attendeeRepository.findOne({
       where: { id },
