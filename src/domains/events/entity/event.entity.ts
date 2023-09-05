@@ -1,5 +1,6 @@
 import { Attendee } from '@/domains/attendees/entity/attendee.entity';
 import { User } from '@/domains/users/entity/user.entity';
+import { Expose } from 'class-transformer';
 import {
   Column,
   Entity,
@@ -11,25 +12,35 @@ import {
 
 @Entity()
 export class Event {
+  constructor(partial: Partial<Event>) {
+    Object.assign(this, partial);
+  }
   @PrimaryGeneratedColumn('uuid')
+  @Expose()
   id: string;
 
   @Column({ length: 255 })
+  @Expose()
   name: string;
 
   @Column()
+  @Expose()
   description: string;
 
   @Column()
+  @Expose()
   event_date: Date;
 
   @Column()
+  @Expose()
   address: string;
 
   @Column({ default: new Date() })
+  @Expose()
   created_at: Date;
 
   @Column({ nullable: true })
+  @Expose()
   updated_at: Date;
 
   //MANY TO MANY RELATIONSHIP: EVENT AND ATTENDEE
@@ -43,15 +54,18 @@ export class Event {
   // })
   // attendees?: Attendee[];
 
+  @Expose()
   @OneToMany(() => Attendee, (attendee) => attendee.event, {
     cascade: true,
   })
   attendees?: Attendee[];
 
+  @Expose()
   @ManyToOne(() => User, (user) => user.events)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
+  @Expose()
   @Column()
   user_id: string;
 }

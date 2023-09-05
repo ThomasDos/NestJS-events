@@ -100,7 +100,8 @@ export class EventsRepository {
       ...createEventDto,
       user,
     });
-    return event;
+
+    return new Event(event);
   }
 
   async updateEvent(

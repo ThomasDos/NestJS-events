@@ -43,8 +43,7 @@ export class UsersRepository {
         password: passwordHash,
         is_admin: Boolean(user.is_admin),
       });
-      delete newUser.password;
-      return newUser;
+      return new User(newUser);
     } catch (error) {
       throw new ConflictException('Username already exists');
     }
