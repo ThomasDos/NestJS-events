@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { SelectQueryBuilder } from 'typeorm';
 
 export interface PaginateOptions {
@@ -6,11 +7,16 @@ export interface PaginateOptions {
   total?: boolean;
 }
 
-export interface PaginationResult<T> {
+export class PaginationResult<T> {
+  @Expose()
   first: number;
+  @Expose()
   last: number;
+  @Expose()
   limit: number;
+  @Expose()
   total?: number;
+  @Expose()
   data: T[];
 }
 
