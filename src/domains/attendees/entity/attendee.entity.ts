@@ -1,6 +1,5 @@
-import { Event } from '@/domains/events/entity/event.entity';
-import { User } from '@/domains/users/entity/user.entity';
-import { PaginationResult } from '@/shared/utils/pagination.utils';
+import { Event } from '@domains/events/entity/event.entity';
+import { User } from '@domains/users/entity/user.entity';
 import { Expose } from 'class-transformer';
 import {
   Column,
@@ -46,6 +45,8 @@ export class Attendee {
   @Column()
   @Expose()
   user_id: string;
-}
 
-export type PaginationEvents = PaginationResult<Event>;
+  constructor(partial?: Partial<Attendee>) {
+    Object.assign(this, partial);
+  }
+}

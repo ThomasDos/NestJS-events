@@ -1,4 +1,4 @@
-import { UsersService } from '@/domains/users/users.service';
+import { UsersService } from '@domains/users/users.service';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import * as bcrypt from 'bcrypt';

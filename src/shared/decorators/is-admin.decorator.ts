@@ -1,4 +1,4 @@
-import { User } from '@/domains/users/entity/user.entity';
+import { User } from '@domains/users/entity/user.entity';
 import { ExecutionContext, createParamDecorator } from '@nestjs/common';
 
 export const IsAdmin = createParamDecorator<

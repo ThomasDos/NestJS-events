@@ -26,7 +26,6 @@ export class EventsController {
   constructor(private eventsService: EventsService) {}
 
   @Get()
-  // @ApiQuery({ type: ListEventsDto })
   getEvents(@Query() filter: ListEventsDto) {
     return this.eventsService.getEvents(filter);
   }

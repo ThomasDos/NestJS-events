@@ -1,5 +1,6 @@
-import { Attendee } from '@/domains/attendees/entity/attendee.entity';
-import { User } from '@/domains/users/entity/user.entity';
+import { PaginationResult } from '@/shared/utils/pagination.utils';
+import { Attendee } from '@domains/attendees/entity/attendee.entity';
+import { User } from '@domains/users/entity/user.entity';
 import { Expose } from 'class-transformer';
 import {
   Column,
@@ -69,3 +70,5 @@ export class Event {
   @Column()
   user_id: string;
 }
+
+export type PaginationEvents = PaginationResult<Event>;
