@@ -17,12 +17,10 @@ import { User } from '../users/entity/user.entity';
 import { CreateEventDto } from './dto/create-event.dto';
 import { ListEventsDto } from './dto/list-events.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { Event } from './entity/event.entity';
 import { EventsService } from './events.service';
 
 @Controller('events')
 export class EventsController {
-  private events: Event[] = [];
   constructor(private eventsService: EventsService) {}
 
   @Get()

@@ -12,5 +12,6 @@ export default registerAs(
     database: process.env.DB_NAME,
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: Boolean(process.env.DB_SYNC),
+    dropSchema: Boolean(process.env.DB_DROP_SCHEMA),
   }),
 );

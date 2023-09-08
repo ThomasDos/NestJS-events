@@ -17,10 +17,13 @@
     "test:watch": "cross-env STAGE=test jest --watch",
     "test:cov": "cross-env STAGE=test jest --coverage",
     "test:debug": "cross-env STAGE=test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "cross-env STAGE=test jest --config ./test/jest-e2e.json",
-    "git": "git add . && git cz && git push"
+    "test:e2e": "yarn seed:run && cross-env STAGE=test jest --config ./test/jest-e2e.json",
+    "git": "git add . && git cz && git push",
+    "seed:config": "cross-env STAGE=test ts-node ./node_modules/typeorm-seeding/dist/cli.js config",
+    "seed:run": "cross-env STAGE=test ts-node --project ./tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.0.2",
     "@hapi/joi": "^17.1.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.0.1",
@@ -42,7 +45,8 @@
     "pg": "^8.11.3",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.17"
+    "typeorm": "^0.3.17",
+    "typeorm-seeding": "^1.6.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
