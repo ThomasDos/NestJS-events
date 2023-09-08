@@ -11,8 +11,9 @@ describe('Events (e2e)', () => {
       imports: [AppModule],
     }).compile();
 
+    console.log('process.env.NODE_ENV', process.env.STAGE);
+
     app = moduleFixture.createNestApplication();
-    await app.init();
 
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     await app.init();
@@ -29,6 +30,7 @@ describe('Events (e2e)', () => {
         when: 'ALL',
         limit: 10,
         current_page: 1,
+        total: true,
       })
       .expect(200)
       .then((res) => {

@@ -20,10 +20,6 @@ export class Attendee {
   @Expose()
   id: string;
 
-  @Column()
-  @Expose()
-  name: string;
-
   // MANY TO MANY RELATIONSHIP: EVENT AND ATTENDEE
   // @ManyToMany(() => Event, (event) => event.attendees)
   // events?: Event[];

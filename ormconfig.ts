@@ -7,7 +7,7 @@ export const dbOptions = {
   database: 'events-test',
   entities: [__dirname + '/src/**/*.entity{.ts,.js}'],
   synchronize: true,
-  dropSchema: false,
+  dropSchema: true,
 };
 
 module.exports = {
